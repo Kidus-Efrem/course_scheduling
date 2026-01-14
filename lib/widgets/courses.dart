@@ -18,7 +18,7 @@ class Courses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(20.0),
 
         child: Container(
           decoration: BoxDecoration(
@@ -30,11 +30,56 @@ class Courses extends StatelessWidget {
               color: Colors.black.withOpacity(0.15)
             )]
             ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Icon(Icons.library_books), Text(courseNumber),Text(courseName), Text(lecturer), Text(room), Text(numberOfStudent),
-            Expanded(child: SizedBox(height: 2 ,child: LinearProgressIndicator(value: 0.7)))]),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.book_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
+                SizedBox(height: 8,),
+                Text(courseNumber),
+                SizedBox(height: 8,),
+
+                Text(courseName),
+                SizedBox(height: 8,),
+
+                 Text(lecturer),
+                SizedBox(height: 8,),
+
+                  Text(room),
+
+                SizedBox(height: 8,),
+
+                  Text(numberOfStudent),
+                SizedBox(height: 8,),
+
+               SizedBox(
+                  height: 5,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(2),
+                    child: LinearProgressIndicator(
+                      value: 0.7,
+                      backgroundColor: Colors.grey.shade300,
+                      valueColor: AlwaysStoppedAnimation(Colors.blue),
+                    ),
+                  ),
+                ),
+
+
+               ]),
+          ),
         ),
 
     );
