@@ -3,7 +3,9 @@ import 'package:course_scheduling/features/auth/presentation/bloc/auth_bloc.dart
 import 'package:course_scheduling/features/auth/presentation/pages/signup_page.dart';
 import 'package:course_scheduling/features/auth/presentation/widgets/auth_field.dart';
 import 'package:course_scheduling/features/auth/presentation/widgets/auth_gradient_btn.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/main_screen.dart';
+import 'package:course_scheduling/features/courses/presentation/pages/admin_main_screen.dart';
+import 'package:course_scheduling/features/courses/presentation/pages/lecture_main_screen.dart';
+import 'package:course_scheduling/features/courses/presentation/pages/student_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,12 +33,37 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthSuccess) {
-          Navigator.pushAndRemoveUntil(
+        if (state is AuthAuthenticated) {
+          final role = state.profile.role;
+          if (role == 'student') {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const StudentMainScreen()),
+              (_) => false,
+            );
+          } else if (role == 'lecturer') {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LecturerMainScreen()),
+              (_) => false,
+            );
+          } else if (role == 'admin') {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const AdminMainScreen()),
+              (_) => false,
+            );
+          } else {
+            // Unknown role, show an error or fallback
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Unknown user role')));
+          }
+        }
+        if (state is AuthFailure) {
+          ScaffoldMessenger.of(
             context,
-            MaterialPageRoute(builder: (_) => const MainScreen()),
-            (_) => false,
-          );
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       child: Scaffold(

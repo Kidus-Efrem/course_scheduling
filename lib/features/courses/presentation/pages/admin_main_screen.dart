@@ -1,26 +1,30 @@
+import 'package:flutter/material.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/home_page.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/my_courses.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/settings.dart';
-import 'package:flutter/material.dart';
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+
+
+
+/// Admin Main Screen
+class AdminMainScreen extends StatefulWidget {
+  const AdminMainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<AdminMainScreen> createState() => _AdminMainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _AdminMainScreenState extends State<AdminMainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    HomePage(),        // Tab 0
-    MyCourses(),   // Tab 1
-    Settings(),    // Tab 2
+    const HomePage(),        // Tab 0
+    const MyCourses(),       // Tab 1
+    const Settings(),        // Tab 2
   ];
 
   void _onTabTapped(int index) {
     setState(() {
-      _selectedIndex = index; // Switch the tab
+      _selectedIndex = index;
     });
   }
 
@@ -34,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onTabTapped,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.red,
         unselectedItemColor: Colors.grey,
         backgroundColor: Colors.white,
         items: const [
@@ -45,7 +49,4 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-}
-
-class MyCoursesPage {
 }

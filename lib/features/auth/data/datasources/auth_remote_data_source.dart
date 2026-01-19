@@ -1,4 +1,5 @@
 import 'package:course_scheduling/core/error/exceptions.dart';
+import 'package:course_scheduling/features/auth/data/models/profile_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthRemoteDataSource {
@@ -12,7 +13,7 @@ abstract interface class AuthRemoteDataSource {
     required String email,
     required String password,
   });
-  Future<Map<String, dynamic>> getProfile({required String userId});
+  Future<ProfileModel> getProfile({required String userId});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -60,17 +61,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> getProfile({required String userId}) async {
+  Future<ProfileModel> getProfile({required String userId}) async {
     try {
       final response = await supabaseClient
-          .from('profile')
+          .from('profiles')
           .select()
-          .eq('user_id', userId)
+          .eq('id', userId)
           .single();
-      if (response == null) {
-        throw const ServerException("Profile not found");
-      }
-      return response as Map<String, dynamic>;
+
+      return ProfileModel.fromMap(response);
     } catch (e) {
       throw ServerException(e.toString());
     }

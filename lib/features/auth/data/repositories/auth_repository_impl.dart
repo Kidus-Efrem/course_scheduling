@@ -1,6 +1,8 @@
 import 'package:course_scheduling/core/error/exceptions.dart';
 import 'package:course_scheduling/core/error/failures.dart';
 import 'package:course_scheduling/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:course_scheduling/features/auth/data/models/profile_model.dart';
+import 'package:course_scheduling/features/auth/domain/entities/profile.dart';
 import 'package:course_scheduling/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -12,7 +14,6 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-
     try {
       final userId = await remoteDataSource.loginWithEmailPassword(
         email: email,
@@ -41,7 +42,16 @@ class AuthRepositoryImpl implements AuthRepository {
       return left(Failure(e.message));
     }
   }
+
   @override
-  Future
+  Future<Either<Failure, Profile>> getProfile({
+    required String userId,
+  }) async {
+    try {
+      final profile = await remoteDataSource.getProfile(userId: userId);
+      return Right(profile);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    }
   }
 }

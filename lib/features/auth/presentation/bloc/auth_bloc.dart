@@ -1,19 +1,26 @@
+import 'package:course_scheduling/features/auth/domain/entities/profile.dart';
+import 'package:course_scheduling/features/auth/domain/usecases/get_profile.dart';
 import 'package:course_scheduling/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:course_scheduling/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 part 'auth_event.dart';
-
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserSignUp _userSignUp;
   final UserSignIn _userSignIn;
-  AuthBloc({required UserSignUp userSignUp, required UserSignIn userSignIn})
-    : _userSignUp = userSignUp,
-      _userSignIn = userSignIn,
+  final GetProfile _getProfile;
 
-      super(AuthInitial()) {
+  AuthBloc({
+    required UserSignUp userSignUp,
+    required UserSignIn userSignIn,
+    required GetProfile getProfile,
+  })  : _userSignUp = userSignUp,
+        _userSignIn = userSignIn,
+        _getProfile = getProfile,
+        super(AuthInitial()) {
+
     on<AuthSignUp>((event, emit) async {
       final res = await _userSignUp(
         UserSignUpParams(
@@ -22,21 +29,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: event.password,
         ),
       );
+
       res.fold(
         (l) => emit(AuthFailure(l.message)),
         (r) => emit(AuthSuccess(uid: r)),
       );
     });
+
     on<AuthSignIn>((event, emit) async {
       final res = await _userSignIn(
         UserSignInParams(email: event.email, password: event.password),
       );
-      res.fold(
-        (l) => emit(AuthFailure(l.message)),
-        (r) {
-          debugPrint("user signed in successful! UID: $r");
-          emit(AuthSuccess(uid: r));},
-      );
+
+       if (res.isLeft()) {
+    emit(AuthFailure(res.getLeft().toNullable()!.message));
+  } else {
+    final uid = res.getRight().toNullable()!;
+    debugPrint("user signed in successfully! UID: $uid");
+
+    final profileResult = await _getProfile(GetProfileParams(userId: uid));
+
+    if (profileResult.isLeft()) {
+      emit(AuthFailure(profileResult.getLeft().toNullable()!.message));
+    } else {
+      final profile = profileResult.getRight().toNullable()!;
+      emit(AuthAuthenticated(profile: profile));
+    }
+  }
     });
   }
 }

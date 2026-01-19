@@ -1,4 +1,5 @@
 import 'package:course_scheduling/core/error/failures.dart';
+import 'package:course_scheduling/features/auth/domain/entities/profile.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class AuthRepository {
@@ -11,7 +12,7 @@ abstract interface class AuthRepository {
     required String email,
     required String password,
   });
-  Future<Either<Failure, Map<String, dynamic>>> getProfile({
+  Future<Either<Failure, Profile>> getProfile({
     required String userId,
   });
 }

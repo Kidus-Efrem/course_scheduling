@@ -11,7 +11,12 @@ final class AuthLoding extends AuthState {}
 
 final class AuthSuccess extends AuthState {
   final String uid;
- const  AuthSuccess({required this.uid});
+  const AuthSuccess({required this.uid});
+}
+
+final class AuthAuthenticated extends AuthState {
+  final Profile profile;
+ const AuthAuthenticated({required this.profile});
 }
 
 final class AuthFailure extends AuthState {
