@@ -6,9 +6,13 @@ import 'package:course_scheduling/features/auth/domain/usecases/user_sign_in.dar
 import 'package:course_scheduling/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:course_scheduling/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:course_scheduling/features/auth/presentation/pages/login_page.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/home_page.dart';
+import 'package:course_scheduling/features/courses/data/datasources/courses_remote_data_source.dart';
+import 'package:course_scheduling/features/courses/data/repositories/courses_repository_impl.dart';
+import 'package:course_scheduling/features/courses/domain/usecases/get_student_courses.dart';
+import 'package:course_scheduling/features/courses/presentation/bloc/student_courses_bloc.dart';
+import 'package:course_scheduling/features/courses/presentation/pages/student_home_content.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/student_main_screen.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/my_courses.dart';
+// import 'package:course_scheduling/features/courses/presentation/pages/my_courses.dart';
 import 'package:course_scheduling/widgets/calander.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,14 +47,24 @@ void main() async {
             ),
           ),
         ),
+        BlocProvider(
+          create: (_) => StudentCoursesBloc(
+            getStudentCourses: GetStudentCourses(
+              CoursesRepositoryImpl(
+                remoteDataSource: CourseRemoteDataSourceImpl(supabaseClient),
+              ),
+            ),
+          ),
+        ),
       ],
-      child: const MyApp(),
+      child: MyApp(supabaseClient: supabaseClient,),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SupabaseClient supabaseClient;
+  const MyApp({super.key, required this.supabaseClient});
 
   // This widget is the root of your application.
   @override
@@ -60,7 +74,7 @@ class MyApp extends StatelessWidget {
 
       title: 'Flutter Demo',
 
-      home: LoginPage(),
+      home: LoginPage(supabaseClient: supabaseClient),
     );
   }
 }

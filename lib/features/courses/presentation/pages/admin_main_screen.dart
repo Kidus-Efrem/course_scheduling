@@ -1,6 +1,6 @@
+import 'package:course_scheduling/features/courses/presentation/pages/student_home_page.dart';
+import 'package:course_scheduling/features/courses/presentation/pages/student_my_courses.dart';
 import 'package:flutter/material.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/home_page.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/my_courses.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/settings.dart';
 
 
@@ -17,8 +17,8 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const HomePage(),        // Tab 0
-    const MyCourses(),       // Tab 1
+    const StudentHomePage(),        // Tab 0
+    const StudentHomePage(),       // Tab 1
     const Settings(),        // Tab 2
   ];
 

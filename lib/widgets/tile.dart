@@ -40,7 +40,7 @@ class Tile extends StatelessWidget {
 
             Row(
             children: [
-              Icon(icon, color: Colors.blue, size: 24,),
+              Icon(icon, color: Colors.blue.shade400, size: 24,),
               SizedBox(width:12),
               Text(
 

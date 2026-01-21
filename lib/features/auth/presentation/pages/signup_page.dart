@@ -6,11 +6,14 @@ import 'package:course_scheduling/features/auth/presentation/widgets/auth_gradie
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignupPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) => const LoginPage());
-  const SignupPage({super.key});
+  final SupabaseClient supabaseClient;
+
+  static route(SupabaseClient supabaseClient) => MaterialPageRoute(builder: (context) =>  LoginPage(supabaseClient: supabaseClient,));
+
+  const SignupPage({super.key, required this.supabaseClient});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -82,7 +85,7 @@ class _SignupPageState extends State<SignupPage> {
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, SignupPage.route());
+                  Navigator.push(context, SignupPage.route(widget.supabaseClient));
                 },
                 child: Container(
                   padding: EdgeInsets.all(8.0),

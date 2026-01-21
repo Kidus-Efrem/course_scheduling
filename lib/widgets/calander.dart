@@ -9,8 +9,8 @@ class WeeklyCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    final startHour = 8;
-    final endHour = 18;
+    final startHour = 2;
+    final endHour = 12;
     final hourHeight = 60.0; // height per hour row
     final dayWidth = 120.0; // width per day column
     final hourLabelWidth = 70.0; // width of the hour labels

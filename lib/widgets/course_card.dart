@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class Course extends StatelessWidget {
+class CourseCard extends StatelessWidget {
   String courseName;
   String lecturer;
-  String room;
+  // String room;
   String courseNumber;
-  String numberOfStudent;
+  // String numberOfStudent;
   final MaterialColor color;
-  Course({
+  CourseCard({
     super.key,
     required this.lecturer,
     required this.courseName,
-    required this.numberOfStudent,
-    required this.room,
+    // required this.numberOfStudent,
+    // required this.room,
     required this.courseNumber,
     required this.color
   });
@@ -81,13 +81,13 @@ class Course extends StatelessWidget {
               ),
               SizedBox(height: 8),
 
-              Row(children: [Icon(Icons.place_outlined, color: color,), SizedBox(width: 8),Text( room)]),
+              // Row(children: [Icon(Icons.place_outlined, color: color,), SizedBox(width: 8),Text( room)]),
 
-              SizedBox(height: 8),
-              Row(
-                children: [Icon(Icons.person_outline,
-                color:color), SizedBox(width: 8),Text( numberOfStudent)],
-              ),
+              // SizedBox(height: 8),
+              // Row(
+                // children: [Icon(Icons.person_outline,
+                // color:color), SizedBox(width: 8),Text( numberOfStudent)],
+              // )
 
               SizedBox(height: 8),
               Row(children:[Icon(Icons.trending_up_outlined ,color: color,),

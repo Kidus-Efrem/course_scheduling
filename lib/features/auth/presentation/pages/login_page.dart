@@ -3,15 +3,19 @@ import 'package:course_scheduling/features/auth/presentation/bloc/auth_bloc.dart
 import 'package:course_scheduling/features/auth/presentation/pages/signup_page.dart';
 import 'package:course_scheduling/features/auth/presentation/widgets/auth_field.dart';
 import 'package:course_scheduling/features/auth/presentation/widgets/auth_gradient_btn.dart';
+import 'package:course_scheduling/features/courses/presentation/bloc/student_courses_bloc.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/admin_main_screen.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/lecture_main_screen.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/student_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class LoginPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) => const SignupPage());
-  const LoginPage({super.key});
+  static route(SupabaseClient supabaseClient) => MaterialPageRoute(builder: (context) =>  SignupPage(supabaseClient: supabaseClient,));
+  final SupabaseClient supabaseClient;
+
+  const LoginPage({super.key, required this.supabaseClient});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -35,10 +39,15 @@ class _LoginPageState extends State<LoginPage> {
       listener: (context, state) {
         if (state is AuthAuthenticated) {
           final role = state.profile.role;
+          String userId = state.profile.userId;
           if (role == 'student') {
+            // context.read<StudentCoursesBloc>().add(LoadStudentCourses(userId: state.profile.userId));
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const StudentMainScreen()),
+              MaterialPageRoute(
+                builder: (_) =>
+                     StudentMainScreen(userId: userId, supabaseClient: widget.supabaseClient,),
+              ),
               (_) => false,
             );
           } else if (role == 'lecturer') {
@@ -108,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, LoginPage.route());
+                    Navigator.push(context, LoginPage.route(widget.supabaseClient));
                   },
                   child: RichText(
                     text: TextSpan(
