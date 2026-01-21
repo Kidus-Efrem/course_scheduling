@@ -1,4 +1,7 @@
 import 'package:course_scheduling/features/courses/domain/entities/courses.dart';
+import 'package:course_scheduling/features/courses/presentation/pages/chat.dart';
+import 'package:course_scheduling/widgets/course_card.dart';
+import 'package:course_scheduling/widgets/course_details_card.dart';
 import 'package:flutter/material.dart';
 
 class CourseDetails extends StatelessWidget {
@@ -40,7 +43,7 @@ class CourseDetails extends StatelessWidget {
 
         title: Row(
           children: [
-           
+
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -64,6 +67,29 @@ class CourseDetails extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      body: Scaffold(
+        body:Container(
+          child: Column(
+            children: [
+
+              CourseDetailsCard(icon: Icons.chat, title: "Course Chat", subtitle: "Discuss with classmate and instructor", iconColor: Colors.blue,onTap: (){Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Chat(section: 'a',),
+                        ),
+                      );}),
+              CourseDetailsCard(icon: Icons.file_download, title: "Resources", subtitle: "Access PDFs, images, and materials",iconColor:  Colors.green, onTap: (){Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Chat(section: 'a',),
+                        ),
+                      );})
+            ]
+
+          ),
+        )
+
       ),
     );
   }
