@@ -24,9 +24,12 @@ class ProfilePage extends StatelessWidget {
           if (state is AuthAuthenticated) {
             final user = state.profile;
             final isLecturer = user.role == 'lecturer';
+            final isAdmin = user.role == 'administrator';
             final gradientColors = isLecturer
                 ? [Colors.green.shade400, Colors.green.shade800]
-                : [Colors.blue.shade200, Colors.blue.shade700];
+                : isAdmin
+                    ? [Colors.purple, Colors.deepPurple]
+                    : [Colors.blue.shade200, Colors.blue.shade700];
 
             return Scaffold(
               backgroundColor: Colors.grey[50],
@@ -35,7 +38,7 @@ class ProfilePage extends StatelessWidget {
                   SliverAppBar(
                     expandedHeight: 250.0,
                     pinned: true,
-                    backgroundColor: isLecturer ? Colors.green[800] : Colors.blue[800],
+                    backgroundColor: Colors.transparent,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Container(
                         decoration: BoxDecoration(
@@ -43,6 +46,10 @@ class ProfilePage extends StatelessWidget {
                             colors: gradientColors,
                             begin: Alignment.bottomRight,
                             end: Alignment.topLeft,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
                           ),
                         ),
                         child: Column(
@@ -54,13 +61,13 @@ class ProfilePage extends StatelessWidget {
                               backgroundColor: Colors.white,
                               child: CircleAvatar(
                                 radius: 46,
-                                backgroundColor: isLecturer ? Colors.green[100] : Colors.blue[100],
+                                backgroundColor: isLecturer ? Colors.green[100] : (user.role == 'administrator' ? Colors.purple[100] : Colors.blue[100]),
                                 child: Text(
                                   user.name[0].toUpperCase(),
                                   style: TextStyle(
                                     fontSize: 40,
                                     fontWeight: FontWeight.bold,
-                                    color: isLecturer ? Colors.green[800] : Colors.blue[800],
+                                    color: isLecturer ? Colors.green[800] : (user.role == 'administrator' ? Colors.purple[800] : Colors.blue[800]),
                                   ),
                                 ),
                               ),
@@ -127,10 +134,10 @@ class ProfilePage extends StatelessWidget {
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: isLecturer ? Colors.green[50] : Colors.blue[50],
+                                  color: isLecturer ? Colors.green[50] : (isAdmin ? Colors.purple[50] : Colors.blue[50]),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Icon(Icons.email, color: isLecturer ? Colors.green : Colors.blue),
+                                child: Icon(Icons.email, color: isLecturer ? Colors.green : (isAdmin ? Colors.purple : Colors.blue)),
                               ),
                               title: const Text("Email Address"),
                               subtitle: Text(Supabase.instance.client.auth.currentUser?.email ?? ''),
@@ -160,23 +167,6 @@ class ProfilePage extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                ListTile(
-                                  leading: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[100],
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: const Icon(Icons.notifications, color: Colors.black54),
-                                  ),
-                                  title: const Text("Notifications"),
-                                  trailing: Switch(
-                                    value: true,
-                                    onChanged: (val) {},
-                                    activeColor: isLecturer ? Colors.green : Colors.blue,
-                                  ),
-                                ),
-                                Divider(height: 1, color: Colors.grey[200]),
                                 ListTile(
                                   leading: Container(
                                     padding: const EdgeInsets.all(8),
