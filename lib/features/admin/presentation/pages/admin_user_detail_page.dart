@@ -79,9 +79,12 @@ class _AdminUserDetailPageState extends State<AdminUserDetailPage> {
             itemCount: enrollments.length,
             itemBuilder: (context, index) {
               final enrollment = enrollments[index];
-              final section = enrollment['sections']; // This might vary based on query structure?
-              // Query was: sections (courses (name, code), section_name)
+              final section = enrollment['sections'];
+              if (section == null) return const SizedBox.shrink();
+
               final course = section['courses'];
+              if (course == null) return const SizedBox.shrink();
+
               final sectionName = section['section_name'] ?? 'Section';
 
               return Card(
@@ -89,8 +92,8 @@ class _AdminUserDetailPageState extends State<AdminUserDetailPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 child: ListTile(
                   leading: const Icon(Icons.book, color: Colors.purple),
-                  title: Text(course['name']),
-                  subtitle: Text("${course['code']} - $sectionName"),
+                  title: Text(course['name'] ?? 'Unknown Course'),
+                  subtitle: Text("${course['code'] ?? 'N/A'} - $sectionName"),
                 ),
               );
             },

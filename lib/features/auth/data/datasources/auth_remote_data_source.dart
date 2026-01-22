@@ -7,6 +7,7 @@ abstract interface class AuthRemoteDataSource {
     required String name,
     required String email,
     required String password,
+    required String role,
   });
   Future<String> loginWithEmailPassword({
     // required String name,
@@ -45,6 +46,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
     required String name,
+    required String role,
   }) async {
     try {
       final response = await supabaseClient.auth.signUp(
@@ -55,6 +57,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.user == null) {
         throw const ServerException('User is null!');
       }
+
+      // Create profile in profiles table
+      await supabaseClient.from('profiles').insert({
+        'id': response.user!.id,
+        'username': name,
+        'role': role,
+      });
+
       return response.user!.id;
     } catch (e) {
       throw ServerException(e.toString());

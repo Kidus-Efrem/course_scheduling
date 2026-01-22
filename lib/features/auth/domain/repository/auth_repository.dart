@@ -7,6 +7,7 @@ abstract interface class AuthRepository {
     required String name,
     required String email,
     required String password,
+    required String role,
   });
   Future<Either<Failure, String>> loginWithEmailPassword({
     required String email,

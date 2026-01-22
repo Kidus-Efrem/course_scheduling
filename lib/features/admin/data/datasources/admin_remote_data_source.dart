@@ -82,8 +82,13 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
             .from('enrollments')
             .select('''
               sections (
-                courses (name, code),
-                section_name
+                id,
+                name,
+                courses (
+                  id,
+                  name,
+                  code
+                )
               )
             ''')
             .eq('student_id', userId);
@@ -93,8 +98,13 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
             .from('lecturer_assignments')
             .select('''
                sections (
-                courses (name, code),
-                section_name
+                id,
+                name,
+                courses (
+                  id,
+                  name,
+                  code
+                )
               )
             ''')
             .eq('lecturer_id', userId);

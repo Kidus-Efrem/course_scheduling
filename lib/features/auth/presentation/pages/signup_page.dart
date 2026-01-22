@@ -24,6 +24,7 @@ class _SignupPageState extends State<SignupPage> {
   final emailController = TextEditingController();
   final nameController = TextEditingController();
   final passwordController = TextEditingController();
+  String? selectedRole;
 
   @override
   void dispose() {
@@ -88,6 +89,43 @@ class _SignupPageState extends State<SignupPage> {
                       obscureText: false,
                     ),
                     const SizedBox(height: 20),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        hintText: 'Select Role',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.grey, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                      ),
+                      value: selectedRole,
+                      items: const [
+                        DropdownMenuItem(value: 'student', child: Text('Student')),
+                        DropdownMenuItem(value: 'lecturer', child: Text('Lecturer')),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedRole = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a role';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
                     AuthField(
                       hintText: 'Email',
                       controller: emailController,
@@ -109,6 +147,7 @@ class _SignupPageState extends State<SignupPage> {
                               email: emailController.text.trim(),
                               password: passwordController.text.trim(),
                               name: nameController.text.trim(),
+                              role: selectedRole!,
                             ),
                           );
                         }

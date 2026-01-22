@@ -27,12 +27,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         .eq('chat_room_id', chatRoomId)
         .order('created_at', ascending: false)
         .map((data) => data.map((json) => ChatMessageModel.fromJson(json)).toList());
-        // Note: Supabase stream doesn't inherently support joining tables (like profiles) easily in the stream event payload in older versions.
-        // If we strictly need username in real-time, we might need a fetch or view.
-        // For now, let's assume we might need to fetch user details separately or rely on simple IDs.
-        // Actually, let's stick to simple implementation first. The Model expects 'profiles' for username.
-        // Standard supabase stream returns the row of the table. It won't have 'profiles' joined.
-        // We'll address this by either fetching profiles or accepting that names might be missing in stream updates initially.
+        
   }
 
   @override
