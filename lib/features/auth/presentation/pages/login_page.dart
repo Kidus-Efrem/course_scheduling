@@ -4,7 +4,7 @@ import 'package:course_scheduling/features/auth/presentation/pages/signup_page.d
 import 'package:course_scheduling/features/auth/presentation/widgets/auth_field.dart';
 import 'package:course_scheduling/features/auth/presentation/widgets/auth_gradient_btn.dart';
 import 'package:course_scheduling/features/courses/presentation/bloc/student_courses_bloc.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/admin_main_screen.dart';
+import 'package:course_scheduling/features/admin/presentation/pages/admin_main_screen.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/lecture_main_screen.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/student_main_screen.dart';
 import 'package:flutter/material.dart';
@@ -56,12 +56,11 @@ class _LoginPageState extends State<LoginPage> {
               MaterialPageRoute(builder: (_) => const LecturerMainScreen()),
               (_) => false,
             );
-          } else if (role == 'admin') {
+          } else if (role == 'administrator') {
             Navigator.pushAndRemoveUntil(
               context,
-             MaterialPageRoute(
-                builder: (_) =>
-                     StudentMainScreen(userId: userId, supabaseClient: widget.supabaseClient,),
+              MaterialPageRoute(
+                builder: (_) => const AdminMainScreen(),
               ),
               (_) => false,
             );
@@ -69,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
             // Unknown role, show an error or fallback
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(const SnackBar(content: Text('Unknown user role')));
+            ).showSnackBar( SnackBar(content: Text(' Unknown user role $role ')));
           }
         }
         if (state is AuthFailure) {

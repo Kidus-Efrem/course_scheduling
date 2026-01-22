@@ -1,4 +1,7 @@
 import 'package:course_scheduling/core/secrets/app_secrets.dart';
+import 'package:course_scheduling/features/admin/data/datasources/admin_remote_data_source.dart';
+import 'package:course_scheduling/features/admin/data/repositories/admin_repository_impl.dart';
+import 'package:course_scheduling/features/admin/presentation/bloc/admin_bloc.dart';
 import 'package:course_scheduling/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:course_scheduling/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:course_scheduling/features/auth/domain/usecases/get_profile.dart';
@@ -92,6 +95,10 @@ void main() async {
             ),
           ),
         ),
+         BlocProvider(
+          create: (_) => AdminBloc(adminRepository: AdminRepositoryImpl(AdminRemoteDataSourceImpl(supabaseClient)))
+          ),
+        
       ],
       child: MyApp(supabaseClient: supabaseClient),
     ),
