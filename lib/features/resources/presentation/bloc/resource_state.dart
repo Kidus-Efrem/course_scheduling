@@ -13,6 +13,11 @@ final class ResourcesLoaded extends ResourceState {
   ResourcesLoaded({required this.resources});
 }
 
+final class ResourcesSuccess extends ResourceState {
+  final String message;
+  ResourcesSuccess({required this.message});
+}
+
 final class ResourcesFailure extends ResourceState {
   final String message;
 

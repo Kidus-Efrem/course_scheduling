@@ -14,12 +14,15 @@ class StudentCoursesBloc
 
       super(StudentCoursesInitial()) {
     on<LoadStudentCourses>((event, emit) async {
+      if (!event.isSilent) {
+        emit(StudentCoursesLoading());
+      }
       final res = await _getStudentCourses(
         GetStudentCoursesParams(userId: event.userId),
       );
       res.fold(
         (l) => emit(StudentCoursesError(message: l.message)),
-        (r) => emit(StudentCoursesLoaded(courses: r)),
+        (r) => emit(StudentCoursesLoaded(courses: r, isSilent: event.isSilent)),
       );
     });
   }

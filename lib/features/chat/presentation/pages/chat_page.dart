@@ -41,11 +41,62 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  @override
+
   Widget build(BuildContext context) {
+    final themeColor = widget.isLecturer ? const Color(0xFF00C853) : Colors.blue.shade700;
+    final gradientColors = widget.isLecturer
+        ? [Colors.green.shade400, Colors.green.shade800]
+        : [Colors.blue.shade200, Colors.blue.shade700];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Group Chat'),
+        toolbarHeight: 90,
+        elevation: 4,
+        backgroundColor: Colors.transparent,
+        centerTitle: false,
+        iconTheme: const IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: gradientColors,
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+            ),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(24),
+              bottomRight: Radius.circular(24),
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                offset: Offset(0, 3),
+                blurRadius: 8,
+              ),
+            ],
+          ),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+             Text(
+              widget.isLecturer ? "Lecturer Chat" : "Group Chat",
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              "Discussion",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
       body: BlocConsumer<ChatBloc, ChatState>(
         listener: (context, state) {
@@ -67,20 +118,9 @@ class _ChatPageState extends State<ChatPage> {
                   child: messages.isEmpty
                       ? const Center(child: Text('No messages yet'))
                       : ListView.builder(
-                          reverse: true, // Usually chats are reversed, but Supabase order is asc. We need to handle this.
-                          // If remote data source orders by created_at asc, then last item is newest.
-                          // For reverse listview, index 0 is bottom.
-                          // So we should reverse the list or use reversed ordering in query.
-                          // Let's check datasource: .order('created_at') (default asc).
-                          // So index 0 is oldest.
-                          // In UI, we usually want bottom-aligned.
-                          // Let's reverse the list here for display if we want newest at bottom.
+                          reverse: true,
                           itemCount: messages.length,
                           itemBuilder: (context, index) {
-                            // Stream is now Newest -> Oldest calls.
-                            // reverse: true builds from bottom.
-                            // Index 0 (Bottom) = messages[0] (Newest).
-                            // This puts Newest at Bottom.
                             final message = messages[index];
                             final isMe = message.senderId == widget.userId;
                             return Align(
@@ -95,9 +135,16 @@ class _ChatPageState extends State<ChatPage> {
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
                                   color: isMe
-                                      ? (widget.isLecturer ? const Color(0xFF00C853) : AppPallete.gradient2)
-                                      : Colors.grey[300],
+                                      ? (widget.isLecturer ? Colors.green[600] : Colors.blue[700])
+                                      : (widget.isLecturer ? Colors.green[50] : Colors.blue[50]),
                                   borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,18 +155,18 @@ class _ChatPageState extends State<ChatPage> {
                                         children: [
                                           Text(
                                             message.senderName ?? 'Unknown',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12,
-                                              color: Colors.black54,
+                                              color: widget.isLecturer ? Colors.green[900] : Colors.blue[900],
                                             ),
                                           ),
                                           const SizedBox(width: 8),
                                           Text(
                                             _formatTime(message.createdAt),
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 10,
-                                              color: Colors.black38,
+                                              color: widget.isLecturer ? Colors.green[700] : Colors.blue[700],
                                             ),
                                           ),
                                         ],
@@ -134,7 +181,8 @@ class _ChatPageState extends State<ChatPage> {
                                           child: Text(
                                             message.messageText,
                                             style: TextStyle(
-                                              color: isMe ? Colors.white : Colors.black,
+                                              color: isMe ? Colors.white : Colors.black87,
+                                              fontSize: 16,
                                             ),
                                           ),
                                         ),

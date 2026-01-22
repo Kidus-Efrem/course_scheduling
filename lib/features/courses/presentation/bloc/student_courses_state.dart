@@ -7,10 +7,10 @@ final class StudentCoursesInitial extends StudentCoursesState {}
 
 class StudentCoursesLoading extends StudentCoursesState {}
 
-class StudentCoursesLoaded extends StudentCoursesState {
+final class StudentCoursesLoaded extends StudentCoursesState {
   final Courses courses;
-
-  StudentCoursesLoaded({required this.courses});
+  final bool isSilent;
+  StudentCoursesLoaded({required this.courses, this.isSilent = false});
 }
 
 class StudentCoursesError extends StudentCoursesState {

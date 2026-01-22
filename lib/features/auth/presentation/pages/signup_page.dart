@@ -36,78 +36,110 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: formkey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Sign Up.',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 30),
-              AuthField(
-                hintText: 'name',
-                controller: nameController,
-                obscureText: false,
-              ),
-              const SizedBox(height: 15),
-              AuthField(
-                hintText: 'email',
-                controller: emailController,
-                obscureText: false,
-              ),
-              const SizedBox(height: 15),
-
-              AuthField(
-                hintText: 'password',
-                controller: passwordController,
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              AuthGradientBtn(
-                name: 'Sign Up',
-                onPressed: () {
-                  if (formkey.currentState!.validate()) {
-                    context.read<AuthBloc>().add(
-                      AuthSignUp(
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim(),
-                        name: nameController.text.trim(),
-                      ),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, SignupPage.route(widget.supabaseClient));
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: "Already have an account? ",
-                      style: Theme.of(context).textTheme.titleMedium,
-                      children: [
-                        TextSpan(
-                          text: 'Sign In',
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: AppPallete.gradient2,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ],
-                    ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF1E88E5), Color(0xFF8E24AA)], // Blue to Purple
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              padding: const EdgeInsets.all(30.0),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
                   ),
+                ],
+              ),
+              child: Form(
+                key: formkey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Create Account',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Sign up to get started',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    AuthField(
+                      hintText: 'Full Name',
+                      controller: nameController,
+                      obscureText: false,
+                    ),
+                    const SizedBox(height: 20),
+                    AuthField(
+                      hintText: 'Email',
+                      controller: emailController,
+                      obscureText: false,
+                    ),
+                    const SizedBox(height: 20),
+                    AuthField(
+                      hintText: 'Password',
+                      controller: passwordController,
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 30),
+                    AuthGradientBtn(
+                      name: 'Sign Up',
+                      onPressed: () {
+                        if (formkey.currentState!.validate()) {
+                          context.read<AuthBloc>().add(
+                            AuthSignUp(
+                              email: emailController.text.trim(),
+                              password: passwordController.text.trim(),
+                              name: nameController.text.trim(),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 25),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, SignupPage.route(widget.supabaseClient));
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Already have an account? ",
+                          style: const TextStyle(color: Colors.black54, fontSize: 16),
+                          children: [
+                            TextSpan(
+                              text: 'Sign In',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

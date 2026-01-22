@@ -111,12 +111,23 @@ class _LecturerDashboardState extends State<LecturerDashboard> {
 
     return Container(
       padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
-      decoration: const BoxDecoration(
-        color: Color(0xFF00C853), // Green theme
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.green.shade400, Colors.green.shade800],
+          begin: Alignment.bottomRight,
+          end: Alignment.topLeft,
+        ),
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 5),
+            blurRadius: 10,
+          ),
+        ],
       ),
       child: Column(
         children: [

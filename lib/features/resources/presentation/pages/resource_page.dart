@@ -46,15 +46,66 @@ class _ResourcePageState extends State<ResourcePage> {
     }
   }
 
-  @override
+
   Widget build(BuildContext context) {
+    final isLecturer = widget.userRole == 'lecturer';
+    final gradientColors = isLecturer
+        ? [Colors.green.shade400, Colors.green.shade800]
+        : [Colors.blue.shade200, Colors.blue.shade700];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Resources'),
+        toolbarHeight: 90,
+        elevation: 4,
+        backgroundColor: Colors.transparent,
+        centerTitle: false,
+        iconTheme: const IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: gradientColors,
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+            ),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(24),
+              bottomRight: Radius.circular(24),
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                offset: Offset(0, 3),
+                blurRadius: 8,
+              ),
+            ],
+          ),
+        ),
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Course Materials",
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              "Resources",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
         actions: [
-          if (widget.userRole == 'lecturer')
+          if (isLecturer)
             IconButton(
-              icon: const Icon(Icons.upload_file),
+              icon: const Icon(Icons.upload_file, color: Colors.white),
               onPressed: () async {
                 final result = await FilePicker.platform.pickFiles();
                 if (result != null) {
@@ -109,6 +160,11 @@ class _ResourcePageState extends State<ResourcePage> {
               SnackBar(content: Text(state.message)),
             );
           }
+          if (state is ResourcesSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+            );
+          }
         },
         builder: (context, state) {
           if (state is ResourcesLoading) {
@@ -123,7 +179,7 @@ class _ResourcePageState extends State<ResourcePage> {
               itemBuilder: (context, index) {
                 final resource = state.resources[index];
                 return ListTile(
-                  leading: const Icon(Icons.description, color: AppPallete.gradient2),
+                  leading: Icon(Icons.description, color: isLecturer ? Colors.green : Colors.blue),
                   title: Text(resource.fileName),
                   subtitle: Text(resource.description ?? 'No description'),
                   trailing: IconButton(

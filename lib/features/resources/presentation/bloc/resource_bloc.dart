@@ -49,6 +49,7 @@ class ResourceBloc extends Bloc<ResourceEvent, ResourceState> {
     result.fold(
       (failure) => emit(ResourcesFailure(message: failure.message)),
       (_) {
+        emit(ResourcesSuccess(message: "Resource uploaded successfully"));
         // Reload resources after upload
         add(LoadResources(
             courseId: event.courseId, sectionId: event.sectionId));

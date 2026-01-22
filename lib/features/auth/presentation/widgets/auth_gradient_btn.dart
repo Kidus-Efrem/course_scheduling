@@ -16,16 +16,28 @@ class AuthGradientBtn extends StatelessWidget {
           end: Alignment.topRight,
         ),
         borderRadius: BorderRadius.circular(27),
+        boxShadow: [
+          BoxShadow(
+            color: AppPallete.gradient2.withOpacity(0.5),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: ElevatedButton(
-        onPressed:onPressed,
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           fixedSize: const Size(395, 55),
-          backgroundColor: AppPallete.transparentColor,
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
         ),
         child: Text(
           name,
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 17,
+            color: Colors.white,
+          ),
         ),
       ),
     );

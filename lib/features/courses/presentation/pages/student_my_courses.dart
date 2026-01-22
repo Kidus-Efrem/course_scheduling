@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 class StudentMyCourses extends StatelessWidget {
   final Courses courses;
   final String userId;
-  const StudentMyCourses({super.key, required this.courses, required this.userId});
+  final Future<void> Function() onRefresh;
+  const StudentMyCourses({super.key, required this.courses, required this.userId, required this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -84,27 +85,30 @@ class StudentMyCourses extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: courses.courses.length,
-                itemBuilder: (contex, index) {
-                  final course = courses.courses[index];
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CourseDetails(course: course, userId: userId,),
-                        ),
-                      );
-                    },
-                    child: CourseCard(
-                      lecturer: course.lecturers[0],
-                      courseName: course.name,
-                      courseNumber: course.code,
-                      color: Colors.blue,
-                    ),
-                  );
-                },
+              child: RefreshIndicator(
+                onRefresh: onRefresh,
+                child: ListView.builder(
+                  itemCount: courses.courses.length,
+                  itemBuilder: (contex, index) {
+                    final course = courses.courses[index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CourseDetails(course: course, userId: userId,),
+                          ),
+                        );
+                      },
+                      child: CourseCard(
+                        lecturer: course.lecturers[0],
+                        courseName: course.name,
+                        courseNumber: course.code,
+                        color: Colors.blue,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             // CourseCard(

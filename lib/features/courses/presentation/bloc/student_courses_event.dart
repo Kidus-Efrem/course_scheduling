@@ -6,7 +6,8 @@ sealed class StudentCoursesEvent {}
 
 class LoadStudentCourses extends StudentCoursesEvent {
   final String userId;
+  final bool isSilent;
 
-  LoadStudentCourses({required this.userId});
+  LoadStudentCourses({required this.userId, this.isSilent = false});
 }
 
