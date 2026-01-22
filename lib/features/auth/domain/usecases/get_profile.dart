@@ -5,7 +5,7 @@ import 'package:course_scheduling/features/auth/domain/repository/auth_repositor
 import 'package:fpdart/fpdart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class GetProfile implements Usecase<Profile, GetProfileParams> {
+class GetProfile implements UseCase<Profile, GetProfileParams> {
 
   final AuthRepository authRepository;
   const GetProfile(this.authRepository);

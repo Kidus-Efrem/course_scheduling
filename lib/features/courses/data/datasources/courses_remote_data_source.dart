@@ -19,6 +19,7 @@ class CourseRemoteDataSourceImpl implements CoursesRemoteDataSource {
           .from('enrollments')
           .select('''
             sections (
+              id,
               courses (
                 id,
                 name,
@@ -49,6 +50,7 @@ class CourseRemoteDataSourceImpl implements CoursesRemoteDataSource {
         final course = section['courses'];
 
         final int courseId = course['id'];
+        final int sectionId = section['id'];
 
         courseMap.putIfAbsent(
           courseId,
@@ -58,6 +60,7 @@ class CourseRemoteDataSourceImpl implements CoursesRemoteDataSource {
             code: course['code'],
             lecturers: [],
             schedule: [],
+            sectionId: sectionId,
           ),
         );
 

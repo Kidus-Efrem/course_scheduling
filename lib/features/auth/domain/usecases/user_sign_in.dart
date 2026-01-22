@@ -3,7 +3,7 @@ import 'package:course_scheduling/core/usecase/usecase.dart';
 import 'package:course_scheduling/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class UserSignIn implements Usecase<String, UserSignInParams> {
+class UserSignIn implements UseCase<String, UserSignInParams> {
   final AuthRepository authRepository;
   const UserSignIn(this.authRepository);
   @override

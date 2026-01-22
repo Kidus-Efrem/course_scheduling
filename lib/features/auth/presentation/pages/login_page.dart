@@ -59,7 +59,10 @@ class _LoginPageState extends State<LoginPage> {
           } else if (role == 'admin') {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const AdminMainScreen()),
+             MaterialPageRoute(
+                builder: (_) =>
+                     StudentMainScreen(userId: userId, supabaseClient: widget.supabaseClient,),
+              ),
               (_) => false,
             );
           } else {

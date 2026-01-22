@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 class StudentMyCourses extends StatelessWidget {
   final Courses courses;
-  const StudentMyCourses({super.key, required this.courses});
+  final String userId;
+  const StudentMyCourses({super.key, required this.courses, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class StudentMyCourses extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CourseDetails(course: course,),
+                          builder: (context) => CourseDetails(course: course, userId: userId,),
                         ),
                       );
                     },

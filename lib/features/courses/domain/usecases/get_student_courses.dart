@@ -4,7 +4,7 @@ import 'package:course_scheduling/features/courses/domain/entities/courses.dart'
 import 'package:course_scheduling/features/courses/domain/repository/courses_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetStudentCourses implements Usecase<Courses, GetStudentCoursesParams> {
+class GetStudentCourses implements UseCase<Courses, GetStudentCoursesParams> {
   final CoursesRepository coursesRepository;
   const GetStudentCourses(this.coursesRepository);
 

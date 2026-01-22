@@ -11,6 +11,8 @@ class Course {
   final String code;
   final List<String> lecturers;
   final List<CourseSchedule> schedule;
+  final int sectionId;
+
 
   Course({
     required this.id,
@@ -18,6 +20,7 @@ class Course {
     required this.code,
     required this.lecturers,
     required this.schedule,
+    required this.sectionId,
   });
 }
 

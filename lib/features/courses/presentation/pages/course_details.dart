@@ -1,12 +1,13 @@
+import 'package:course_scheduling/features/chat/presentation/pages/chat_page.dart';
 import 'package:course_scheduling/features/courses/domain/entities/courses.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/chat.dart';
-import 'package:course_scheduling/widgets/course_card.dart';
+import 'package:course_scheduling/features/resources/presentation/pages/resource_page.dart';
 import 'package:course_scheduling/widgets/course_details_card.dart';
 import 'package:flutter/material.dart';
 
 class CourseDetails extends StatelessWidget {
   final Course course;
-  const CourseDetails({super.key, required this.course});
+  final String userId;
+  const CourseDetails({super.key, required this.course, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -68,29 +69,31 @@ class CourseDetails extends StatelessWidget {
           ],
         ),
       ),
-      body: Scaffold(
-        body:Container(
+      body: Container(
           child: Column(
             children: [
 
               CourseDetailsCard(icon: Icons.chat, title: "Course Chat", subtitle: "Discuss with classmate and instructor", iconColor: Colors.blue,onTap: (){Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Chat(section: 'a',),
+                          builder: (context) => ChatPage(courseId: course.id, sectionId: course.sectionId, userId: userId),
                         ),
                       );}),
               CourseDetailsCard(icon: Icons.file_download, title: "Resources", subtitle: "Access PDFs, images, and materials",iconColor:  Colors.green, onTap: (){Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Chat(section: 'a',),
+                          builder: (context) => ResourcePage(
+                            courseId: course.id,
+                            sectionId: course.sectionId,
+                            userId: userId,
+                            userRole: 'student',
+                          ),
                         ),
                       );})
             ]
 
           ),
         )
-
-      ),
     );
   }
 }

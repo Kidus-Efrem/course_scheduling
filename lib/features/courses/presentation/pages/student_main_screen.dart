@@ -3,7 +3,7 @@ import 'package:course_scheduling/features/courses/data/repositories/courses_rep
 import 'package:course_scheduling/features/courses/domain/usecases/get_student_courses.dart';
 import 'package:course_scheduling/features/courses/presentation/bloc/student_courses_bloc.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/student_my_courses.dart';
-import 'package:course_scheduling/features/courses/presentation/pages/settings.dart';
+import 'package:course_scheduling/features/auth/presentation/pages/profile_page.dart';
 import 'package:course_scheduling/features/courses/presentation/pages/student_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +54,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (state is StudentCoursesLoaded) {
-                  return StudentMyCourses(courses: state.courses);
+                  return StudentMyCourses(courses: state.courses, userId: widget.userId);
                 }
                 if (state is StudentCoursesError) {
                   return Center(child: Text(state.message));
@@ -62,7 +62,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                 return const SizedBox.shrink();
               },
             ),
-            Settings(),
+            const ProfilePage(),
           ];
 
           return Scaffold(
@@ -79,8 +79,8 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                   label: 'Courses',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  label: 'Settings',
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
                 ),
               ],
             ),

@@ -8,12 +8,15 @@ class CourseModel {
   final List<String> lecturers;
   final List<CourseScheduleModel> schedule;
 
+  final int sectionId;
+
   CourseModel({
     required this.id,
     required this.name,
     required this.code,
     required this.lecturers,
     required this.schedule,
+    required this.sectionId,
   });
 
   Course toEntity() {
@@ -23,6 +26,7 @@ class CourseModel {
       code: code,
       lecturers: lecturers,
       schedule: schedule.map((s) => s.toEntity()).toList(),
+      sectionId: sectionId,
     );
   }
 }
