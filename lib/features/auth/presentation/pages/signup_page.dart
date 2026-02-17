@@ -6,7 +6,7 @@ import 'package:course_scheduling/features/auth/presentation/widgets/auth_gradie
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class SignupPage extends StatefulWidget {
   final SupabaseClient supabaseClient;
@@ -36,146 +36,174 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF1E88E5), Color(0xFF8E24AA)], // Blue to Purple
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthSuccess) {
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Account created successfully! Please sign in.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          // Navigate to login page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginPage(supabaseClient: widget.supabaseClient),
+            ),
+          );
+        } else if (state is AuthFailure) {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF1E88E5), Color(0xFF8E24AA)], // Blue to Purple
+            ),
           ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              padding: const EdgeInsets.all(30.0),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Form(
-                key: formkey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Create Account',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Sign up to get started',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    AuthField(
-                      hintText: 'Full Name',
-                      controller: nameController,
-                      obscureText: false,
-                    ),
-                    const SizedBox(height: 20),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        hintText: 'Select Role',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.grey, width: 1),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.grey, width: 1),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-                      ),
-                      value: selectedRole,
-                      items: const [
-                        DropdownMenuItem(value: 'student', child: Text('Student')),
-                        DropdownMenuItem(value: 'lecturer', child: Text('Lecturer')),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          selectedRole = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a role';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    AuthField(
-                      hintText: 'Email',
-                      controller: emailController,
-                      obscureText: false,
-                    ),
-                    const SizedBox(height: 20),
-                    AuthField(
-                      hintText: 'Password',
-                      controller: passwordController,
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 30),
-                    AuthGradientBtn(
-                      name: 'Sign Up',
-                      onPressed: () {
-                        if (formkey.currentState!.validate()) {
-                          context.read<AuthBloc>().add(
-                            AuthSignUp(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
-                              name: nameController.text.trim(),
-                              role: selectedRole!,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 25),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, SignupPage.route(widget.supabaseClient));
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          text: "Already have an account? ",
-                          style: const TextStyle(color: Colors.black54, fontSize: 16),
-                          children: [
-                            TextSpan(
-                              text: 'Sign In',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                padding: const EdgeInsets.all(30.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
                     ),
                   ],
+                ),
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Create Account',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Sign up to get started',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      AuthField(
+                        hintText: 'Full Name',
+                        controller: nameController,
+                        obscureText: false,
+                      ),
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          hintText: 'Select Role',
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.grey, width: 1),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.grey, width: 1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                        ),
+                        value: selectedRole,
+                        items: const [
+                          DropdownMenuItem(value: 'student', child: Text('Student')),
+                          DropdownMenuItem(value: 'lecturer', child: Text('Lecturer')),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            selectedRole = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select a role';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      AuthField(
+                        hintText: 'Email',
+                        controller: emailController,
+                        obscureText: false,
+                      ),
+                      const SizedBox(height: 20),
+                      AuthField(
+                        hintText: 'Password',
+                        controller: passwordController,
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 30),
+                      AuthGradientBtn(
+                        name: 'Sign Up',
+                        onPressed: () {
+                          if (formkey.currentState!.validate()) {
+                            context.read<AuthBloc>().add(
+                              AuthSignUp(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                                name: nameController.text.trim(),
+                                role: selectedRole!,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 25),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, SignupPage.route(widget.supabaseClient));
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            text: "Already have an account? ",
+                            style: const TextStyle(color: Colors.black54, fontSize: 16),
+                            children: [
+                              TextSpan(
+                                text: 'Sign In',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

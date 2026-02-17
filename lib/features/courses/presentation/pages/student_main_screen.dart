@@ -30,18 +30,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   @override
   void initState() {
     super.initState();
-    // Start auto-refresh timer
-    // _refreshTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
-    //   // We can access the context if the widget is mounted, but here we are creating the BlocProvider in build.
-    //   // This is a common issue. If we create BlocProvider in build, we can't easily access it from here unless we hold a reference or move BlocProvider up.
-    //   // However, we can move logic to a wrapper or use a GlobalKey, or clearer:
-    //   // The BlocProvider is created in build. This timer should ideally be controlled where the Bloc exists.
-    //   // But we can just dispatch the event if we find the bloc from context.
-    //   // WAIT: BlocProvider is created in build method of THIS widget. so `context.read<StudentCoursesBloc>` inside this widget won't work because the context doesn't contain it yet (it's a child of this widget).
 
-    //   // Correct Approach: The BlocProvider should be outside or we need `Builder`.
-    //   // The current code has `BlocProvider` inside `build`. The `Timer` is in `State` of `StudentMainScreen`.
-    //   // We cannot access the Bloc created in `build` from `initState` or `Timer` easily unless we store it.
     // });
   }
 
@@ -69,11 +58,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
       )..add(LoadStudentCourses(userId: widget.userId)),
       child: Builder( // Use Builder to get a context that has the Bloc
         builder: (context) {
-          // Initialize Timer here if it hasn't been started? No, build is called many times.
-          // Better: Use a Stateful wrapper for the content inside BlocProvider OR just move BlocProvider up.
-          // For now, I will use a `LayoutBuilder` or `useEffect` style hook? No.
-          // I will use a separate widget for the body content that has access to the Bloc, OR
-          // I can simply start the timer in the body widget's InitState.
+          
 
           return _StudentMainContent(
              userId: widget.userId,
